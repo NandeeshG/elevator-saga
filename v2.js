@@ -39,17 +39,21 @@ let obj = {
       if (dir === "up" || dir === "stopped") {
         //all gt cur shall be sorted in ascending order
         for (let i = cid; i < elevator.destinationQueue.length; ++i) {
-          newQ.push(elevator.destinationQueue[i]);
+          if (elevator.destinationQueue[i] !== cur)
+            newQ.push(elevator.destinationQueue[i]);
         }
         for (let i = cid - 1; i >= 0; --i) {
-          newQ.push(elevator.destinationQueue[i]);
+          if (elevator.destinationQueue[i] !== cur)
+            newQ.push(elevator.destinationQueue[i]);
         }
       } else if (dir === "down") {
         for (let i = cid - 1; i >= 0; --i) {
-          newQ.push(elevator.destinationQueue[i]);
+          if (elevator.destinationQueue[i] !== cur)
+            newQ.push(elevator.destinationQueue[i]);
         }
         for (let i = cid; i < elevator.destinationQueue.length; ++i) {
-          newQ.push(elevator.destinationQueue[i]);
+          if (elevator.destinationQueue[i] !== cur)
+            newQ.push(elevator.destinationQueue[i]);
         }
       }
 
