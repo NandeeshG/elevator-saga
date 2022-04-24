@@ -23,41 +23,56 @@ let obj = {
       let cur = elevator.currentFloor();
       let dir = elevator.destinationDirection();
 
-      console.log("OLD queue:", elevator.destinationQueue);
+      console.log(
+        "OLD queue:",
+        elevator.destinationQueue,
+        "cur: ",
+        cur,
+        "dir: ",
+        dir
+      );
 
       //remove duplicates
-      elevator.destinationQueue = [...new Set(elevator.destinationQueue)];
+      let st = new Set(elevator.destinationQueue);
+      let newQ = [];
+      if (st.has(cur)) {
+        newQ.push(cur);
+        st.delete(cur);
+      }
+      elevator.destinationQueue = [...st];
 
       //sort in ascending whatever the direction maybe
       elevator.destinationQueue.sort((a, b) => {
         return a - b;
       });
 
-      let newQ = [];
       let cid = lowerBound(elevator.destinationQueue, cur);
 
       if (dir === "up" || dir === "stopped") {
         //all gt cur shall be sorted in ascending order
         for (let i = cid; i < elevator.destinationQueue.length; ++i) {
-          if (elevator.destinationQueue[i] !== cur)
-            newQ.push(elevator.destinationQueue[i]);
+          newQ.push(elevator.destinationQueue[i]);
         }
         for (let i = cid - 1; i >= 0; --i) {
-          if (elevator.destinationQueue[i] !== cur)
-            newQ.push(elevator.destinationQueue[i]);
+          newQ.push(elevator.destinationQueue[i]);
         }
       } else if (dir === "down") {
         for (let i = cid - 1; i >= 0; --i) {
-          if (elevator.destinationQueue[i] !== cur)
-            newQ.push(elevator.destinationQueue[i]);
+          newQ.push(elevator.destinationQueue[i]);
         }
         for (let i = cid; i < elevator.destinationQueue.length; ++i) {
-          if (elevator.destinationQueue[i] !== cur)
-            newQ.push(elevator.destinationQueue[i]);
+          newQ.push(elevator.destinationQueue[i]);
         }
       }
 
-      console.log("NEW queue:", newQ);
+      console.log(
+        "NEW queue:",
+        elevator.destinationQueue,
+        "cur: ",
+        cur,
+        "dir: ",
+        dir
+      );
 
       elevator.destinationQueue = newQ;
       elevator.checkDestinationQueue();
@@ -116,7 +131,6 @@ let obj = {
 
       E.on("stopped_at_floor", function (f) {
         console.log("Elevator:", e, " stopped at floor:", f);
-        insertStopInMiddle(E, f);
       });
     }
 
